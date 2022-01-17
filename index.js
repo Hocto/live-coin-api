@@ -8,12 +8,18 @@ dotenv.config();
 const url = process.env.URL;
 const apiKey = process.env.API_KEY;
 
-const app = express();
 let cacheCoinWithCode = new Map();
 let cacheCoinWithName = new Map();
 let coinList = {};
 const formatter = new Intl.NumberFormat("de-DE");
 let firstTimestamp, secondTimeStamp;
+
+const app = express();
+
+//Swagger Integration
+var swaggerUi = require('swagger-ui-express');
+swaggerDocument = require('./swagger.json');
+app.use('/swagger-ui', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 app.use(morgan("tiny"));
 
@@ -95,6 +101,8 @@ const getCoinList = () => {
     })
     .catch((error) => {
       console.log("Error occurred: ", error);
+      res.status(500);
+      return { error: true, message: e };
     });
 };
 

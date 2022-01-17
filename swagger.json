@@ -1,0 +1,223 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "version": "1.0.0",
+    "title": "Global Cryptocurrency",
+    "description": "Cryptocurrency API that provides live exchange values on USD for top coins by market cap."
+  },
+  "tags": [
+    {
+      "name": "Coin with Code",
+      "description": "Providing coin rate and market values on USD for available coin with given code."
+    },
+    {
+      "name": "Coin with Name",
+      "description": "Providing coin rate and market values on USD for available coin with given name."
+    },
+    {
+      "name": "Coins",
+      "description": "Providing available currencies"
+    }
+  ],
+  "consumes": ["application/json"],
+  "produces": ["application/json"],
+  "paths": {
+    "/coin/code/:code": {
+      "get": {
+        "tags": ["Coin with Code"],
+        "summary": "Get specific coin rate, analytic values, market cap for given code",
+        "parameters": [
+          {
+            "name": "code",
+            "in": "path",
+            "required": true,
+            "description": "Specific Coin Code",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/definitions/CoinData"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Check Coin Code in Path",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "type": "object",
+                      "properties": {
+                        "error": {
+                          "type": "boolean",
+                          "example": true
+                        },
+                        "message": {
+                          "type": "string",
+                          "example": "Invalid coin code"
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/coin/name/:name": {
+        "get": {
+          "tags": ["Coin with Name"],
+          "summary": "Get specific coin rate, analytic values, market cap for given name",
+          "parameters": [
+            {
+              "name": "name",
+              "in": "path",
+              "required": true,
+              "description": "Specific Coin Name",
+              "type": "string"
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "OK",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/definitions/CoinData"
+                  }
+                }
+              }
+            },
+            "500": {
+              "description": "Check Coin Name in Path",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "oneOf": [
+                      {
+                        "type": "object",
+                        "properties": {
+                          "error": {
+                            "type": "boolean",
+                            "example": true
+                          },
+                          "message": {
+                            "type": "string",
+                            "example": "Invalid coin name"
+                          }
+                        }
+                      }
+                    ]
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+    "/coins": {
+      "get": {
+        "tags": ["Coins"],
+        "summary": "List Available Coins' Code and Name as Key-Value'",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/definitions/CoinListData"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "boolean",
+                      "example": true
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Internal Server Error"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "CoinData": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "example": "Bitcoin"
+        },
+        "code": {
+          "type": "string",
+          "example": "BTC"
+        },
+        "rate": {
+          "properties": {
+            "base": {
+              "type": "string",
+              "example": "USD"
+            },
+            "amount": {
+              "type": "string",
+              "example": "42.213,36547510"
+            },
+            "totalVolume": {
+              "type": "string",
+              "example": "11.927.543,627"
+            },
+            "capInMarket": {
+              "type": "string",
+              "example": "799.195.297,130"
+            },
+            "maxValueEver": {
+              "type": "string",
+              "example": "68.780,77475755"
+            }
+          }
+        }
+      }
+    },
+    "CoinListData": {
+      "type": "object",
+      "properties": {
+        "BTC": {
+          "type": "string",
+          "example": "Bitcoin"
+        },
+        "ETH": {
+          "type": "string",
+          "example": "Etherium"
+        },
+        "BNB": {
+          "type": "string",
+          "example": "Binance Coin"
+        }
+      }
+    }
+  }
+}
