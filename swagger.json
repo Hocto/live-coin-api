@@ -16,7 +16,7 @@
     },
     {
       "name": "Coins",
-      "description": "Providing available currencies"
+      "description": "Providing available coins"
     }
   ],
   "consumes": ["application/json"],
